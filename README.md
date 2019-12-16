@@ -12,4 +12,4 @@ Desenvolver um sistema de controle de alunos de uma escola.
 
 ----
 #### Ideia
-* [markdown-js](http://estuda.com/)
+* [Estuda.com](http://estuda.com/)
