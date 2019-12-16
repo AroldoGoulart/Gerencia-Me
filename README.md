@@ -9,3 +9,7 @@ Desenvolver um sistema de controle de alunos de uma escola.
 - MySQL
 - DJANGO 
 - React 
+
+----
+#### Ideia
+* [markdown-js](http://estuda.com/)
