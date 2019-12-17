@@ -7,7 +7,7 @@ Desenvolver um sistema de controle de alunos de uma escola.
 ### Tecnologias
 - Python 3
 - MySQL
-- DJANGO 
+- Flask 
 - React 
 
 ----
