@@ -14,17 +14,9 @@ create table Escolas(
 	Nome_Escola varchar(100) NOT NULL,
     	Endereço varchar(255),
     	Data_Escola year(4),
-    	Situação int(1) NOT NULL,
+    	Situação enum("Em atividade","Paralisada","Extinta","Extinta no ano anterior") NOT NULL,
 	primary key (Id)
 );
-
-/* 
-Situação, pode ser
-1 = "Em atividade"
-2 = "Paralisada"
-3 = "Extitna"
-4 = "Extinta no ano anterior"
-*/
 
 create table Turmas(
 	Id int NOT NULL AUTO_INCREMENT,
