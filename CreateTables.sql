@@ -12,9 +12,9 @@ create table Alunos(
 create table Escolas(
 	Id int NOT NULL AUTO_INCREMENT,
 	Nome_Escola varchar(100) NOT NULL,
-    Endereço varchar(255),
-    Data_Escola date,
-    Situação int(1) NOT NULL,
+    	Endereço varchar(255),
+    	Data_Escola year,
+    	Situação int(1) NOT NULL,
 	primary key (Id)
 );
 
