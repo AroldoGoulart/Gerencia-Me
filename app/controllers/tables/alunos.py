@@ -10,7 +10,7 @@ def __dt_conversor__(dt):
 
 # Conectar ao Banco de dados, alimentando-se do arquivo db.json
 def __connect__():
-    with open('db.json') as f:    
+    with open('./app/db.json') as f:    
         data = json.load(f)
 
     connection = pymysql.connect(host='localhost',
@@ -126,7 +126,7 @@ def createJson():
         # Criando (se não existente) e escrevendo dados em alunos.json
         records = cursor.fetchall()
 
-        with open('./app/data/alunos.json', 'w') as fp:
+        with open('./frontend/src/data/alunos.json', 'w') as fp:
             json.dump(records, fp, default=__dt_conversor__)
 
         # Fechando abertura QUERY

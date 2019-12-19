@@ -7,7 +7,7 @@ import pymysql.cursors, sys, json
 
 # Conectar ao Banco de dados, alimentando-se do arquivo db.json
 def __connect__():
-    with open('db.json') as f:    
+    with open('./app/db.json') as f:    
         data = json.load(f)
 
     connection = pymysql.connect(host='localhost',
@@ -88,7 +88,7 @@ def searchTurma(date, metodo):
             cursor.execute(sql, (date))
             # Guardar dados da pesquisa em um json
             records = cursor.fetchall()
-            with open('./app/data/pesquisa.json', 'w') as fp:
+            with open('./frontend/src/data/pesquisa.json', 'w') as fp:
                 json.dump(records, fp)
     finally:
         connection.close()
