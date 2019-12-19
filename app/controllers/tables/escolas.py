@@ -5,8 +5,6 @@ import requests
 from datetime import datetime
 import pymysql.cursors, sys, json
 
-
-
 # Conectar ao Banco de dados, alimentando-se do arquivo db.json
 def __connect__():
     with open('db.json') as f:    
@@ -31,6 +29,7 @@ def getAPICloud():
         # Filtro de dados da API + Upload para Banco de Dados
         a = 0
         while (a < rJson[0]):
+            idEscola = rJson[1][a]['cod']
             nomeEscola = rJson[1][a]['nome']
             regiaoEscola = rJson[1][a]['regiao'] + " - " + rJson[1][a]['cidade'] + " - " + rJson[1][a]['estado']
             anoEscola = rJson[1][a]['anoCenso']
@@ -39,14 +38,15 @@ def getAPICloud():
             
             with connection.cursor() as cursor:
                 # Fazendo requesição QUERY no Banco de dados
-                sql = "INSERT INTO `Escolas` (Nome_Escola, Endereço, Data_Escola, Situação) VALUES (%s, %s, %s, %s)"
-                cursor.execute(sql, (nomeEscola, regiaoEscola, anoEscola, situaçaoEscola))
+                sql = "INSERT INTO `Escolas` (Id, Nome_Escola, Endereço, Data_Escola, Situação) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(sql, (idEscola, nomeEscola, regiaoEscola, anoEscola, situaçaoEscola))
             connection.commit()
             a = a +1
     except:
         print("Erro ao executar banco de dados em getAPICloud")
     finally:
         connection.close()
+
 
 # Inserir Escola 
 def createEscola(nomeEscola, Regiao, Cidade ,Estado, anoEscola, situaçaoEscola):
@@ -60,9 +60,10 @@ def createEscola(nomeEscola, Regiao, Cidade ,Estado, anoEscola, situaçaoEscola)
             cursor.execute(sql, (nomeEscola, regiaoEscola, anoEscola, situaçaoEscola))
         connection.commit()
     except:
-        print("Erro ao executar banco de dados em getAPICloud")
+        print("Erro ao executar banco de dados em createEscola")
     finally:
         connection.close()
+
 
 # Deletar Escla
 def deleteEscola(Id):
@@ -79,28 +80,65 @@ def deleteEscola(Id):
             # Executar atualização no Banco de Dados
             connection.commit()
         except:
-            print("Falha ao conectar com o banco e, deleteAluno")
+            print("Falha ao conectar com o banco e, deleteEscola")
         finally:
             connection.close()
     else:
         print("Valor passado não é inteiro")
 
+
 # Procurar Escola por Nome_Escola ou Endereço Data_Escola Situação
-def searchEscola(IdOrEmail, metodo):
+def searchEscola(date, metodo):
+    try:
         connection = __connect__()
 
         # Colocando filtros para o sql
-        IdOrEmail = "%"+IdOrEmail+"%"
+        if(isinstance(date,int)):
+            sql = "SELECT * FROM Escolas WHERE Id = (%s)"
+        else:
+            date = "%"+date+"%"
 
-        # Verificando qual foi o metodo solicitado
-        sql = "SELECT * FROM Escolas WHERE Situação LIKE (%s)"
+            # Verificando qual foi o metodo solicitado
+            if (metodo == "Nome_Escola"):
+                sql = "SELECT * FROM Escolas WHERE Nome_Escola LIKE (%s)"
+
+            elif (metodo == "Endereço"):
+                sql = "SELECT * FROM Escolas WHERE Endereço LIKE (%s)"
+
+            elif (metodo == "Data_Escola"):
+                sql = "SELECT * FROM Escolas WHERE Data_Escola LIKE (%s)"
+
+            else:
+                sql = "SELECT * FROM Escolas WHERE Situação LIKE (%s)"
+
         # Fazendo requesição QUERY no Banco de dados
         with connection.cursor() as cursor:
-            cursor.execute(sql, (IdOrEmail))
+            cursor.execute(sql, (date))
             # Guardar dados da pesquisa em um json
             records = cursor.fetchall()
-            with open('pesquisa.json', 'w') as fp:
+            with open('./app/data/pesquisa.json', 'w') as fp:
                 json.dump(records, fp)
+    finally:
+        connection.close()
 
-        # Fechando abertura QUERY
-        cursor.close()
+
+
+def updateEscola(Id, Nome_Escola, Regiao, Cidade ,Estado, Data_Escola, Situação):
+    try:
+        connection = __connect__()
+
+        regiaoEscola = Regiao + " - " + Cidade + " - " + Estado
+
+        with connection.cursor() as cursor:
+                sql = "UPDATE `Escolas` SET Nome_Escola = (%s), Endereço = (%s), Data_Escola = (%s), Situação = (%s) WHERE  Id = (%s)"
+                cursor.execute(sql, (Nome_Escola, regiaoEscola, Data_Escola, Situação, Id))
+      
+        # Executar atualização no Banco de Dados
+        connection.commit()
+
+        # Atualizar arquivo JSON
+        createJson()    
+    except:
+        print('Erro na conexão com o banco em updateEscola')
+    finally:
+        connection.close()

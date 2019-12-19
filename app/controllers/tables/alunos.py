@@ -87,7 +87,7 @@ def searchAluno(IdOrEmail, metodo):
 
         # Guardar dados da pesquisa em um json
         records = cursor.fetchall()
-        with open('pesquisa.json', 'w') as fp:
+        with open('./app/data/pesquisa.json', 'w') as fp:
             json.dump(records, fp, default=__dt_conversor__)
 
         # Fechando abertura QUERY
@@ -97,7 +97,7 @@ def searchAluno(IdOrEmail, metodo):
     finally:
         connection.close()
 
-
+# Atualizar dados de aluno
 def updateAluno(Id, Nome, Email, Telefone, Data_de_Nascimento, Genero):
     try:
         connection = __connect__()
@@ -126,14 +126,14 @@ def createJson():
         # Criando (se não existente) e escrevendo dados em alunos.json
         records = cursor.fetchall()
 
-        with open('alunos.json', 'w') as fp:
+        with open('./app/data/alunos.json', 'w') as fp:
             json.dump(records, fp, default=__dt_conversor__)
 
         # Fechando abertura QUERY
         cursor.close()
 
     except:
-        print("Fala ao conectar com o banco em createJson Alunos")
+        print("Falha ao conectar com o banco em createJson Alunos")
     finally:
         connection.close()
 
