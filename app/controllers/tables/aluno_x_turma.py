@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Arquivo responsavel pelo requesição API Integrada e CRUD da tabela Escola
 
 import requests
@@ -43,13 +44,13 @@ def deleteAlunoTurma(Id):
 
             # Fazendo requesição QUERY no Banco de dados
             with connection.cursor() as cursor:
-                sql = "DELETE FROM `Alunos_X_Turma` WHERE  Id = (%s)"
+                sql = "DELETE FROM Alunos_X_Turma WHERE  Id_Aluno = (%s)"
                 cursor.execute(sql, Id)
 
             # Executar atualização no Banco de Dados
             connection.commit()
-        except:
-            print("Falha ao conectar com o banco e, deleteAlunoTurma")
+        except Exception as e :
+            print(e)
         finally:
             connection.close()
     else:
@@ -77,20 +78,5 @@ def searchAlunoTurma(date, metodo):
                 json.dump(records, fp)
     except:
         print("Erro em searchAlunoTurma")
-    finally:
-        connection.close()
-
-
-
-def updateAlunoTurma(Id_Aluno, Id_Novo_Aluno, Id_Turma):
-    try:
-        connection = __connect__()
-
-        with connection.cursor() as cursor:
-                sql = "UPDATE `Alunos_X_Turma` SET Id_Aluno = (%s), Id_Turma = (%s) WHERE  Id_Aluno = (%s)"
-                cursor.execute(sql, (Id_Novo_Aluno, Id_Turma, Id_Aluno))
-          
-        # Executar atualização no Banco de Dados
-        connection.commit()
     finally:
         connection.close()

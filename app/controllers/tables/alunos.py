@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Arquivos responsavel pelo CRUD da tabela Alunos 
 
 from datetime import datetime
@@ -77,9 +78,9 @@ def searchAluno(IdOrEmail, metodo):
 
         # Verificando qual foi o metodo solicitado
         if(metodo == "Email"):
-            sql = "SELECT * FROM 'Alunos' WHERE Email LIKE %s"
+            sql = "SELECT * FROM Alunos WHERE Email LIKE %s"
         else:
-            sql = "SELECT * FROM 'Alunos' WHERE Nome LIKE %s"
+            sql = "SELECT * FROM Alunos WHERE Nome LIKE (%s)"
 
         # Fazendo requesição QUERY no Banco de dados
         with connection.cursor() as cursor:
@@ -87,16 +88,16 @@ def searchAluno(IdOrEmail, metodo):
 
         # Guardar dados da pesquisa em um json
         records = cursor.fetchall()
-        with open('./app/data/pesquisa.json', 'w') as fp:
+        with open('./frontend/src/data/pesquisa.json', 'w') as fp:
             json.dump(records, fp, default=__dt_conversor__)
 
         # Fechando abertura QUERY
         cursor.close()
     except:
-        print('Erro em searchAluno')
+        print("Erro em searchAluno")
     finally:
         connection.close()
-
+   
 # Atualizar dados de aluno
 def updateAluno(Id, Nome, Email, Telefone, Data_de_Nascimento, Genero):
     try:
@@ -128,13 +129,6 @@ def createJson():
 
         with open('./frontend/src/data/alunos.json', 'w') as fp:
             json.dump(records, fp, default=__dt_conversor__)
-
-        # Fechando abertura QUERY
-        cursor.close()
-
-    except:
-        print("Falha ao conectar com o banco em createJson Alunos")
     finally:
-        connection.close()
-
-
+        connection.close()    
+    

@@ -56,32 +56,31 @@ def deleteTurma(Id):
         print("Valor passado não é inteiro")
 
 
-# Procurar Turma por Nome_Escola ou Endereço Data_Escola Situação
+# Procurar Turma por Nome_Escola ou Endereço Data_Escola Situação  ou id
 def searchTurma(date, metodo):
     try:
         connection = __connect__()
 
         # Colocando filtros para o sql
-        if(isinstance(data,int)):
-            date = date
-            sql = "SELECT * FROM Escolas WHERE Id = (%s)"
+        if(isinstance(date,int)):
+            sql = "SELECT * FROM Turmas WHERE Id = (%s)"
         else:
             date = "%"+date+"%"
 
             # Verificando qual foi o metodo solicitado
             if (metodo == "Ano"):
-                sql = "SELECT * FROM Escolas WHERE Ano LIKE (%s)"
+                sql = "SELECT * FROM Turmas WHERE Ano LIKE (%s)"
 
             elif (metodo == "Nivel_de_Ensino"):
-                sql = "SELECT * FROM Escolas WHERE Nivel_de_Ensino LIKE (%s)"
+                sql = "SELECT * FROM Turmas WHERE Nivel_de_Ensino LIKE (%s)"
 
             elif (metodo == "Serie"):
-                sql = "SELECT * FROM Escolas WHERE Serie LIKE (%s)"
+                sql = "SELECT * FROM Turmas WHERE Serie LIKE (%s)"
             
             elif (metodo == "Turno"):
-                sql = "SELECT * FROM Escolas WHERE Turno LIKE (%s)"
+                sql = "SELECT * FROM Turmas WHERE Turno LIKE (%s)"
             else:
-                sql = "SELECT * FROM Escolas WHERE Id_Escola LIKE (%s)"
+                sql = "SELECT * FROM Turmas WHERE Id_Escola LIKE (%s)"
 
         # Fazendo requesição QUERY no Banco de dados
         with connection.cursor() as cursor:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Arquivo responsavel pelo requesição API Integrada e CRUD da tabela Escola
 
 import requests
@@ -33,17 +34,17 @@ def getAPICloud():
             nomeEscola = rJson[1][a]['nome']
             regiaoEscola = rJson[1][a]['regiao'] + " - " + rJson[1][a]['cidade'] + " - " + rJson[1][a]['estado']
             anoEscola = rJson[1][a]['anoCenso']
-            situaçaoEscola= rJson[1][a]['situacaoFuncionamentoTxt']
+            situacaoEscola= rJson[1][a]['situacaoFuncionamentoTxt']
 
             
             with connection.cursor() as cursor:
                 # Fazendo requesição QUERY no Banco de dados
                 sql = "INSERT INTO `Escolas` (Id, Nome_Escola, Endereço, Data_Escola, Situação) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(sql, (idEscola, nomeEscola, regiaoEscola, anoEscola, situaçaoEscola))
+                cursor.execute(sql, (idEscola, nomeEscola, regiaoEscola, anoEscola, situacaoEscola))
             connection.commit()
             a = a +1
-    except:
-        print("Erro ao executar banco de dados em getAPICloud")
+    except Exception as e :
+        print(e)
     finally:
         connection.close()
 
@@ -59,8 +60,8 @@ def createEscola(nomeEscola, Regiao, Cidade ,Estado, anoEscola, situaçaoEscola)
             sql = "INSERT INTO `Escolas` (Nome_Escola, Endereço, Data_Escola, Situação) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql, (nomeEscola, regiaoEscola, anoEscola, situaçaoEscola))
         connection.commit()
-    except:
-        print("Erro ao executar banco de dados em createEscola")
+    except Exception as e :
+        print(e)
     finally:
         connection.close()
 
@@ -79,15 +80,15 @@ def deleteEscola(Id):
 
             # Executar atualização no Banco de Dados
             connection.commit()
-        except:
-            print("Falha ao conectar com o banco e, deleteEscola")
+        except Exception as e :
+            print(e)
         finally:
             connection.close()
     else:
         print("Valor passado não é inteiro")
 
 
-# Procurar Escola por Nome_Escola ou Endereço Data_Escola Situação
+# Procurar Escola por Nome_Escola ou Endereço Data_Escola Situação id
 def searchEscola(date, metodo):
     try:
         connection = __connect__()
@@ -118,6 +119,8 @@ def searchEscola(date, metodo):
             records = cursor.fetchall()
             with open('./frontend/src/data/pesquisa.json', 'w') as fp:
                 json.dump(records, fp)
+    except Exception as e :
+        print(e)
     finally:
         connection.close()
 
@@ -136,9 +139,7 @@ def updateEscola(Id, Nome_Escola, Regiao, Cidade ,Estado, Data_Escola, Situaçã
         # Executar atualização no Banco de Dados
         connection.commit()
 
-        # Atualizar arquivo JSON
-        createJson()    
-    except:
-        print('Erro na conexão com o banco em updateEscola')
+    except Exception as e :
+        print(e)
     finally:
         connection.close()
