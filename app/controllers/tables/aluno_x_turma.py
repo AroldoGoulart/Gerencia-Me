@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# Arquivo responsavel pelo requesição API Integrada e CRUD da tabela Escola
+# -*- coding: utf-8 -*
+# CRUD da tabela respectiva.
 
 import requests
 
